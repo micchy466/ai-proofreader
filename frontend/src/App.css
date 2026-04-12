@@ -1,0 +1,104 @@
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--text);
+  margin-bottom: 32px;
+}
+
+.upload-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  cursor: pointer;
+}
+
+.file-button {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.file-button:hover {
+  border-color: var(--accent);
+}
+
+.submit-button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  padding: 24px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error {
+  padding: 16px;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  color: #c00;
+}
+
+.result {
+  text-align: left;
+}
+
+.result h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.result-content {
+  background: var(--code-bg);
+  padding: 24px;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  line-height: 1.8;
+  font-size: 15px;
+}
