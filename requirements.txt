@@ -4,3 +4,7 @@ python-multipart==0.0.26
 python-dotenv==1.2.2
 boto3==1.42.91
 pypdf==6.10.2
+reportlab==4.4.10
+sqlmodel==0.0.38
+# 本番でPostgreSQLを使う場合は以下を追加:
+# psycopg2-binary==2.9.10
