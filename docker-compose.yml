@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-proofreader}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-proofreader}
+      POSTGRES_DB: ${POSTGRES_DB:-proofreader}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-proofreader}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-proofreader}:${POSTGRES_PASSWORD:-proofreader}@postgres:5432/${POSTGRES_DB:-proofreader}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-northeast-1}
+      BEDROCK_MODEL: ${BEDROCK_MODEL:-jp.anthropic.claude-sonnet-4-6}
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      # ソースをマウントしてホットリロード。venv はコンテナ内限定にする。
+      - .:/app
+      - /app/venv
+      - backend_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      # Dockerでのファイル変更検知はpolling必須
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  backend_data:
